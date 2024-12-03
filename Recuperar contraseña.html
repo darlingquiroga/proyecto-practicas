@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="estilo-front.css">
+
+    <script>
+        function enviarEmail(event) {
+            event.preventDefault(); // Evitar el envío automático del formulario
+
+            // Obtener el correo electrónico ingresado
+            const email = document.getElementById("email").value.trim();
+
+            // Validar que el correo no esté vacío
+            if (!email) {
+                alert("Por favor, ingresa un correo electrónico.");
+                return;
+            }
+
+            // Simulación del envío del correo
+            // Aquí podrías integrar un servicio real para enviar el correo de reseteo
+            alert("Se ha enviado un correo de reseteo a " + email);
+            
+            // Mostrar mensaje de confirmación en la página (opcional)
+            document.getElementById("confirmation-message").textContent = "Se ha enviado un correo de reseteo a " + email + ".";
+            document.getElementById("confirmation-message").style.color = "green";
+            
+            // Limpiar el formulario
+            document.querySelector(".password-reset-form").reset();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Recuperar Contraseña</h1>
+        <form class="password-reset-form" onsubmit="enviarEmail(event)">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" placeholder="Ingresa tu correo" required>
+
+            <button type="submit" class="btn-primary">Resetear Contraseña</button>
+        </form>
+
+        <!-- Mensaje de confirmación -->
+        <p id="confirmation-message"></p>
+
+        <a href="Pantalla de Inicio.html" class="link">Volver</a>
+    </div>
+</body>
+</html>

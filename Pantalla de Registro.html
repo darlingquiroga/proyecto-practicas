@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="estilo-front.css">
+    <script>
+        function validateForm(event) {
+            event.preventDefault(); // Prevenir envío automático del formulario
+            
+            // Obtener los valores de los campos
+            const nombre = document.getElementById("nombre").value.trim();
+            const apellido = document.getElementById("apellido").value.trim();
+            const nacimiento = document.getElementById("nacimiento").value;
+            const telefono = document.getElementById("telefono").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+
+            // Obtener los elementos de error
+            const errorNombre = document.getElementById("error-nombre");
+            const errorApellido = document.getElementById("error-apellido");
+            const errorNacimiento = document.getElementById("error-nacimiento");
+            const errorTelefono = document.getElementById("error-telefono");
+            const errorEmail = document.getElementById("error-email");
+            const errorPassword = document.getElementById("error-password");
+            const errorConfirmPassword = document.getElementById("error-confirm-password");
+
+            // Limpiar mensajes de error
+            errorNombre.textContent = "";
+            errorApellido.textContent = "";
+            errorNacimiento.textContent = "";
+            errorTelefono.textContent = "";
+            errorEmail.textContent = "";
+            errorPassword.textContent = "";
+            errorConfirmPassword.textContent = "";
+
+            // Validar nombre (solo letras y al menos 2 caracteres)
+            const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}$/;
+            if (!nombreRegex.test(nombre)) {
+                errorNombre.textContent = "El nombre debe contener al menos 2 letras y solo puede incluir letras y espacios.";
+                return;
+            }
+
+            // Validar apellido (solo letras y al menos 2 caracteres)
+            if (!nombreRegex.test(apellido)) {
+                errorApellido.textContent = "El apellido debe contener al menos 2 letras y solo puede incluir letras y espacios.";
+                return;
+            }
+
+            // Validar fecha de nacimiento (no futura)
+            const fechaHoy = new Date().toISOString().split("T")[0];
+            if (nacimiento >= fechaHoy) {
+                errorNacimiento.textContent = "La fecha de nacimiento no puede ser en el futuro.";
+                return;
+            }
+
+            // Validar teléfono (solo números y entre 10 y 15 dígitos)
+            const telefonoRegex = /^[0-9]{8,15}$/;
+            if (!telefonoRegex.test(telefono)) {
+                errorTelefono.textContent = "Por favor, ingresa un teléfono válido (solo números, entre 8 y 15 dígitos).";
+                return;
+            }
+
+            // Validar email (formato correcto)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorEmail.textContent = "Por favor, ingresa un correo electrónico válido.";
+                return;
+            }
+
+            // Validar contraseña (entre 8 y 12 caracteres, sin espacios ni caracteres especiales)
+            const passwordRegex = /^[a-zA-Z0-9]{8,12}$/;
+            if (!passwordRegex.test(password)) {
+                errorPassword.textContent = "La contraseña debe tener entre 8 y 12 caracteres sin espacios ni caracteres especiales.";
+                return;
+            }
+
+            // Validar confirmación de contraseña
+            if (password !== confirmPassword) {
+                errorConfirmPassword.textContent = "Las contraseñas no coinciden.";
+                return;
+            }
+
+            // Si todas las validaciones pasan, redirigir a la página de confirmación
+            window.location.href = "Confrimación de  registro.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Regístrate</h1>
+        <form class="register-form" onsubmit="validateForm(event)">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" placeholder="Ingresa tu nombre" required>
+            <p id="error-nombre" class="error-message"></p>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" placeholder="Ingresa tu apellido" required>
+            <p id="error-apellido" class="error-message"></p>
+
+            <label for="nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="nacimiento" required>
+            <p id="error-nacimiento" class="error-message"></p>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" placeholder="Ingresa tu teléfono" required>
+            <p id="error-telefono" class="error-message"></p>
+
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" placeholder="Ingresa tu correo" required>
+            <p id="error-email" class="error-message"></p>
+
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" placeholder="Crea una contraseña" required>
+            <p id="error-password" class="error-message"></p>
+
+            <label for="confirm-password">Confirmar Contraseña:</label>
+            <input type="password" id="confirm-password" placeholder="Confirma tu contraseña" required>
+            <p id="error-confirm-password" class="error-message"></p>
+
+            <button type="submit" class="btn-primary">Registrarse</button>
+            <p class="text-small">
+                ¿Ya tienes cuenta? <a href="Pantalla de Inicio.html" class="link">Inicia Sesión</a>
+            </p>
+        </form>
+    </div>
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
+</body>
+</html>

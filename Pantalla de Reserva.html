@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Turno</title>
+    <link rel="stylesheet" href="estilo-front.css">
+    <style>
+        /* Estilos básicos para el formulario */
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .precio-tiempo {
+            font-size: 1.1em;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        .link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reservar Turno</h1>
+        <form class="reservation-form" action="#" method="POST">
+            <label for="servicio">Servicio:</label>
+            <select id="servicio" required>
+                <option value="corte">Corte</option>
+                <option value="color">Color</option>
+                <option value="tratamiento">Tratamiento</option>
+            </select>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" required />
+
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" required />
+
+            <label for="profesional">Profesional:</label>
+            <select id="profesional" required>
+                <option value="juan">Juan</option>
+                <option value="ana">Ana</option>
+                <option value="luis">Luis</option>
+            </select>
+
+            <!-- Campo de estado de pago -->
+            <label for="pago">Estado de Pago:</label>
+            <select id="pago" class="disabled" disabled required>
+                <option value="pagado">Pagado</option>
+                <option value="no_pagado">No Pagado</option>
+            </select>
+
+            <!-- Mostrar el precio estimado y el tiempo estimado debajo del formulario -->
+            <div class="precio-tiempo">
+                <p id="precio">Precio Estimado: $6000</p>
+                <p id="tiempo">Tiempo Estimado: 30 minutos</p>
+            </div>
+
+            <button type="submit" class="btn-primary">Confirmar Turno</button>
+        </form>
+        <a href="Pantalla Principal (Menú).html" class="link">Volver al Menú</a>
+    </div>
+
+    <script>
+        // Establecer la fecha mínima como la fecha actual
+        document.addEventListener("DOMContentLoaded", () => {
+            const fechaInput = document.getElementById('fecha');
+            const today = new Date().toISOString().split('T')[0];
+            fechaInput.setAttribute('min', today);
+
+            // Configuración de precios por servicio
+            const precios = {
+                corte: 6000,
+                color: 10000,
+                tratamiento: 8000,
+            };
+
+            // Elemento para mostrar el precio
+            const precioDisplay = document.getElementById('precio');
+
+            // Función para actualizar el precio basado en el servicio
+            const actualizarPrecio = () => {
+                const servicio = document.getElementById('servicio').value;
+                const precio = precios[servicio] || 0;
+                precioDisplay.textContent = `Precio Estimado: $${precio}`;
+            };
+
+            // Actualizar precio cuando cambie el servicio
+            const servicioSelect = document.getElementById('servicio');
+            servicioSelect.addEventListener('change', actualizarPrecio);
+
+            // Limitar la fecha a lunes a sábado
+            fechaInput.addEventListener('input', (event) => {
+                const selectedDate = new Date(event.target.value);
+                const dayOfWeek = selectedDate.getDay(); // 0: Domingo, 1: Lunes, ..., 6: Sábado
+
+                if (dayOfWeek === 0) { // Si es domingo (día 0)
+                    alert('No puedes seleccionar un domingo. Elige un día entre lunes y sábado.');
+                    fechaInput.setCustomValidity('Elige un día entre lunes y sábado');
+                } else {
+                    fechaInput.setCustomValidity('');
+                }
+            });
+
+            // Limitar las horas a 9AM a 8PM
+            const horaInput = document.getElementById('hora');
+            horaInput.setAttribute('min', '09:00');
+            horaInput.setAttribute('max', '20:00');
+
+            // Función de confirmación al enviar el formulario
+            const reservationForm = document.querySelector('.reservation-form');
+            reservationForm.addEventListener('submit', (event) => {
+                event.preventDefault(); // Evitar el envío automático
+
+                // Obtener los datos del formulario
+                const servicio = document.getElementById('servicio').value;
+                const fecha = document.getElementById('fecha').value;
+                const hora = document.getElementById('hora').value;
+                const profesional = document.getElementById('profesional').value;
+                const pago = document.getElementById('pago').value;
+                const precio = precios[servicio] || 0;
+
+                // Confirmar los datos antes de proceder
+                const confirmacion = confirm(`
+                    ¿Estás seguro que deseas reservar el turno con los siguientes detalles?
+
+                    Servicio: ${servicio}
+                    Fecha: ${fecha}
+                    Hora: ${hora}
+                    Profesional: ${profesional}
+                    Precio Estimado: $${precio}
+                    Pago: ${pago === "pagado" ? "Pagado" : "No Pagado"}
+                `);
+
+                if (confirmacion) {
+                    // Si el usuario confirma, mostrar mensaje de éxito
+                    alert(`Reserva exitosa!\n- Servicio: ${servicio}\n- Fecha: ${fecha}\n- Hora: ${hora}\n- Profesional: ${profesional}\n- Precio Estimado: $${precio}\n- Pago: ${pago === "pagado" ? "Pagado" : "No Pagado"}`);
+
+                    // Opcional: Redirigir o resetear el formulario
+                    reservationForm.reset();
+                    actualizarPrecio(); // Restablecer el precio cuando se limpia el formulario
+                } else {
+                    alert('Reserva cancelada.');
+                }
+            });
+
+            // Inicializar el precio al cargar la página
+            actualizarPrecio();
+        });
+    </script>
+</body>
+</html>
